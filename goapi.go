@@ -45,5 +45,10 @@ func main() {
 			"hum" : hum,
 		})
 	})
+	r.GET("/api", func(c *gin.Context) {
+		c.JSON(200, gin.H{
+			"routes": gin.Default().Routes(),
+		})
+	})
 	r.Run(":8888") // listen and serve on 0.0.0.0:8080
 }
