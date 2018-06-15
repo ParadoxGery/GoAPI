@@ -2,22 +2,13 @@ package main
 
 import (
 	"github.com/gin-gonic/gin"
-	_"github.com/mattn/go-sqlite3"
-	"database/sql"
 	"log"
 	"github.com/stianeikeland/go-rpio"
 	"github.com/d2r2/go-dht"
 )
 
 func main() {
-
-	db, err := sql.Open("sqlite3", "./temphu.db")
-
-	if err != nil {
-		log.Fatal("db error " + err.Error())
-	}
-
-	err = rpio.Open()
+	err := rpio.Open()
 
 	if err != nil {
 		log.Fatal("gpio error " + err.Error())
