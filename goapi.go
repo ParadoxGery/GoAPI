@@ -62,7 +62,7 @@ func main() {
 		pin.Low()
 	})
 	r.GET("/temps", func(c *gin.Context) {
-		temp, hum, ret, err := dht.ReadDHTxxWithRetry(dht.DHT11, 6, true, 5)
+		temp, hum, ret, err := dht.ReadDHTxxWithRetry(dht.DHT11, 11, true, 5)
 		if err != nil {
 			c.JSON(500, gin.H{
 				"message": err.Error(),
