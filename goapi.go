@@ -2,9 +2,9 @@ package main
 
 import (
 	"github.com/gin-gonic/gin"
-	"log"
 	"github.com/stianeikeland/go-rpio"
 	"github.com/d2r2/go-dht"
+	"log"
 )
 
 func main() {
@@ -32,7 +32,7 @@ func main() {
 		pin.Low()
 	})
 	r.GET("/temp", func(c *gin.Context) {
-		temp, hum, ret, err := dht.ReadDHTxxWithRetry(dht.DHT11, 9, true, 5)
+		temp, hum, _, err := dht.ReadDHTxxWithRetry(dht.DHT11, 9, false, 2)
 		if err != nil {
 			c.JSON(500, gin.H{
 				"message": err.Error(),
@@ -43,7 +43,6 @@ func main() {
 		c.JSON(200, gin.H{
 			"temp": temp,
 			"hum" : hum,
-			"tries" : ret,
 		})
 	})
 	r.Run(":8888") // listen and serve on 0.0.0.0:8080
