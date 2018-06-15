@@ -30,27 +30,6 @@ func main() {
 			"message": "pong",
 		})
 	})
-	r.GET("/temp", func(c *gin.Context) {
-		temps, err := db.Query("SELECT `temp` FROM `temphu` ORDER BY DATE(`date`) DESC LIMIT 1")
-
-		if err != nil {
-			println(err.Error())
-			c.JSON(500, gin.H{
-				"message": err.Error(),
-			})
-			return
-		}
-
-		temps.Next()
-
-		var temp int
-
-		err = temps.Scan(&temp)
-
-		c.JSON(200, gin.H{
-			"temp": temp,
-		})
-	})
 	r.PUT("/pew", func(c *gin.Context) {
 		pin := rpio.Pin(10)
 		pin.Output()
@@ -61,8 +40,8 @@ func main() {
 		pin.Output()
 		pin.Low()
 	})
-	r.GET("/temps", func(c *gin.Context) {
-		temp, hum, ret, err := dht.ReadDHTxxWithRetry(dht.DHT11, 11, true, 5)
+	r.GET("/temp", func(c *gin.Context) {
+		temp, hum, ret, err := dht.ReadDHTxxWithRetry(dht.DHT11, 9, true, 5)
 		if err != nil {
 			c.JSON(500, gin.H{
 				"message": err.Error(),
