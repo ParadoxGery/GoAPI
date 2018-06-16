@@ -4,9 +4,14 @@ import (
 	"github.com/gin-gonic/gin"
 	"GoAPI/sensors"
 	"GoAPI/io"
+	"database/sql"
+	"time"
+	"github.com/d2r2/go-dht"
 )
 
 func main() {
+	go collectData()
+
 	r := gin.Default()
 	r.Static("/web", "./web")
 
@@ -27,12 +32,6 @@ func main() {
 	//TEMPHU
 	r.GET("/temp", sensors.TempHuHandler(9).GetTempHu())
 
-	//TEMPDATA
-	r.GET("/temps", func(c *gin.Context) {
-		//c.JSON(200, [][][]int{ { {1, 2}, {3, 5}, {5, 13}, {1, 42}, {3, 45}, {5,53} } })
-		c.JSON(200, [][]gin.H{ { {"a": 2}, {"v": 5}, {"x": 13}, {"2": 42}, {"aa": 45}, {"5":53} } })
-	})
-
 	r.GET("/tempdata", sensors.TempHuHandler(9).GetTempList())
 	r.GET("/hudata", sensors.TempHuHandler(9).GetHuList())
 
@@ -42,4 +41,29 @@ func main() {
 	})
 
 	r.Run(":8888") // listen and serve on 0.0.0.0:8080
+}
+
+func collectData() {
+	db, err := sql.Open("sqlite3", "./temphu.db")
+
+	if err != nil {
+		return
+	}
+	for {
+		temp, hu, _ , err := dht.ReadDHTxxWithRetry(dht.DHT11, 9, false, 5)
+
+		if err != nil {
+			continue
+		}
+
+		stmt, err := db.Prepare("INSERT INTO temphu(date, temp, hu) VALUES (DATETIME('now'), ?, ?)")
+
+		if err != nil {
+			continue
+		}
+
+		stmt.Exec(temp, hu)
+
+		time.Sleep(1.8e+12)
+	}
 }
