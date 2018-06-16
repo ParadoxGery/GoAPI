@@ -20,8 +20,8 @@ function createPlot(url, place, headline, yAxisLabel) {
                 xaxis: {
                     label: 'time [hh:mm]',
                     renderer:$.jqplot.DateAxisRenderer,
-                    //tickOptions:{formatString:'%H:%M'},
-                    //tickInterval:'1 hour'
+                    tickOptions:{formatString:'%H:%M'},
+                    tickInterval:'1 hour'
                 },
                 yaxis: {
                     label: yAxisLabel,
@@ -33,6 +33,7 @@ function createPlot(url, place, headline, yAxisLabel) {
 }
 
 $(document).ready(function(){
-    createPlot("http://localhost:8888/tempdata","chart1","Day Temperature","temperature [°C]");
-    createPlot("http://localhost:8888/hudata","chart2","Day Humidity","humidity [%]");
+    var host = $(location).attr('host');
+    createPlot("http://"+host+"/tempdata","chart1","Day Temperature","temperature [°C]");
+    createPlot("http://"+host+"/hudata","chart2","Day Humidity","humidity [%]");
 });

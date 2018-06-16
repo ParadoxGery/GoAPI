@@ -54,7 +54,7 @@ func (t tempHuHandler) GetTempList() gin.HandlerFunc {
 		}
 	}
 
-	rows, err := db.Query("SELECT date, temp FROM temphu WHERE DATE(date) BETWEEN DATETIME('now', '-1 day') AND DATETIME('now');")
+	rows, err := db.Query("SELECT date, temp FROM temphu WHERE DATETIME(date) BETWEEN DATETIME('now', '-1 day') AND DATETIME('now');")
 
 	if err != nil {
 		log.Fatal(err.Error())
