@@ -13,7 +13,7 @@ func main() {
 	go collectData()
 
 	r := gin.Default()
-	r.Static("/web", "./web")
+	r.Static("/dash", "./web")
 
 	r.GET("/ping", func(c *gin.Context) {
 		c.JSON(200, gin.H{
