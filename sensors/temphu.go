@@ -25,7 +25,7 @@ func (t tempHuHandler) GetTempHu() gin.HandlerFunc {
 			})
 			return
 		}
-		temp, hum, _, err := dht.ReadDHTxxWithRetry(dht.DHT11, 9, false, 2)
+		temp, hum, _, err := dht.ReadDHTxxWithRetry(dht.DHT11, t.Pin, false, 2)
 		if err != nil {
 			c.JSON(500, gin.H{
 				"message": "error",
@@ -57,6 +57,7 @@ func (t tempHuHandler) GetTempList() gin.HandlerFunc {
 		rows, err := db.Query("SELECT date, temp FROM temphu WHERE DATETIME(date) BETWEEN DATETIME('now', '-1 day') AND DATETIME('now');")
 
 		if err != nil {
+			//TODO error
 			log.Fatal(err.Error())
 		}
 		var temps = "[["
@@ -67,6 +68,7 @@ func (t tempHuHandler) GetTempList() gin.HandlerFunc {
 
 			if err != nil {
 				//TODO error
+				log.Fatal(err.Error())
 			}
 
 			temps += "[\""+date+"\","+strconv.Itoa(temp)+"],"

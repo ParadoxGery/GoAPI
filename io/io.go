@@ -27,6 +27,8 @@ func (i ioHandler) IoHigh() gin.HandlerFunc {
 				"message": "error",
 				"error": err.Error(),
 			})
+
+			return
 		}
 
 		pin := rpio.Pin(pinNum)
@@ -56,6 +58,8 @@ func (i ioHandler) IoLow() gin.HandlerFunc {
 				"message": "error",
 				"error": err.Error(),
 			})
+
+			return
 		}
 
 		pin := rpio.Pin(pinNum)

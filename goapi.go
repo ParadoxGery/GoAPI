@@ -40,7 +40,7 @@ func main() {
 		c.JSON(200, gin.Default().Routes())
 	})
 
-	r.Run(":8888") // listen and serve on 0.0.0.0:8080
+	r.Run(":8888") // listen and serve on 0.0.0.0:8888
 }
 
 func collectData() {

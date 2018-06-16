@@ -19,7 +19,7 @@ func (l lazorHandler) Pew(on bool) gin.HandlerFunc {
 
 			return
 		}
-		pin := rpio.Pin(10)
+		pin := rpio.Pin(l.Pin)
 		pin.Output()
 		if on {
 			pin.High()
