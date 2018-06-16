@@ -33,7 +33,6 @@ function createPlot(url, place, headline, yAxisLabel) {
 }
 
 $(document).ready(function(){
-    var jsonurl = "http://localhost:8888/temps";
-    createPlot(jsonurl,"chart1","Day Temperature","temperature [°C]");
-    createPlot(jsonurl,"chart2","Day Humidity","humidity [%]");
+    createPlot("http://localhost:8888/tempdata","chart1","Day Temperature","temperature [°C]");
+    createPlot("http://localhost:8888/hudata","chart2","Day Humidity","humidity [%]");
 });
