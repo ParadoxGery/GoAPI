@@ -83,6 +83,47 @@ func (t tempHuHandler) GetTempList() gin.HandlerFunc {
 	}
 }
 
+func (t tempHuHandler) GetHuList() gin.HandlerFunc {
+	db, err := sql.Open("sqlite3", "./temphu.db")
+
+	if err != nil {
+		return func(c *gin.Context) {
+			c.JSON(500, gin.H{
+				"message": "error",
+				"error": err.Error(),
+			})
+		}
+	}
+
+	rows, err := db.Query("SELECT date, hu FROM temphu WHERE DATE(date) BETWEEN DATETIME('now', '-1 day') AND DATETIME('now');")
+
+	if err != nil {
+		log.Fatal(err.Error())
+	}
+	var hus = "[["
+	for rows.Next() {
+		var date string
+		var hu int
+		err := rows.Scan(&date, &hu)
+
+		if err != nil {
+			//TODO error
+		}
+
+		hus += "[\""+date+"\","+strconv.Itoa(hu)+"],"
+	}
+
+	l := len(hus)
+	hus = hus[:l-1]
+
+	hus += "]]"
+
+	return func(c *gin.Context) {
+		//c.JSON(200, hus)
+		c.Data(200, "application/json", []byte(hus))
+	}
+}
+
 func TempHuHandler(pin int) tempHuHandler {
 	err := rpio.Open()
 	handler := tempHuHandler{

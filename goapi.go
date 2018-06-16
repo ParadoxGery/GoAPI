@@ -34,6 +34,7 @@ func main() {
 	})
 
 	r.GET("/tempdata", sensors.TempHuHandler(9).GetTempList())
+	r.GET("/hudata", sensors.TempHuHandler(9).GetHuList())
 
 	//API REPORT
 	r.GET("/api", func(c *gin.Context) {
