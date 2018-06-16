@@ -1,0 +1,63 @@
+ <!DOCTYPE html>
+<html>
+<head>
+<title>Page Title</title>
+<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+</head>
+<body>
+
+<div id="myDiv"></div>
+  <script>
+   var trace1 = {
+    x: [1, 2, 3, 4],
+    y: [10, 15, 13, 17],
+    mode: 'lines+markers',
+    name: 'mon'
+   };
+
+   var trace2 = {
+    x: [2, 3, 4, 5],
+    y: [16, 5, 11, 9],
+    mode: 'lines+markers',
+    name: 'tue'
+   };
+
+   var trace3 = {
+    x: [1, 2, 3, 4],
+    y: [12, 9, 15, 12],
+    mode: 'lines+markers',
+    name: 'wed'
+   };
+
+   var trace4 = {
+    x: [1, 2, 3, 4],
+    y: [12, 9, 15, 12],
+    mode: 'lines+markers',
+    name: 'thu'
+   };
+
+   var trace5 = {
+    x: [1, 2, 3, 4],
+    y: [12, 9, 15, 12],
+    mode: 'lines+markers',
+    name: 'fri'
+   };
+
+
+   var data = [trace1, trace2, trace3, trace4, trace5];
+
+   var layout = {
+    title: 'Week',
+    xaxis: {
+     title: 'Time'
+    },
+    yaxis: {
+     title: 'Temperature'
+    }
+   };
+
+   Plotly.newPlot('myDiv', data, layout);
+  </script>
+
+</body>
+</html> 
