@@ -16,16 +16,15 @@ type tempHuHandler struct {
 }
 
 func (t tempHuHandler) GetTempHu() gin.HandlerFunc {
-	if !t.ioIsWorking {
-		return func(c *gin.Context) {
+
+	return func(c *gin.Context) {
+		if !t.ioIsWorking {
 			c.JSON(500, gin.H{
 				"message": "error",
 				"error": "gpio is not working",
 			})
+			return
 		}
-	}
-
-	return func(c *gin.Context) {
 		temp, hum, _, err := dht.ReadDHTxxWithRetry(dht.DHT11, 9, false, 2)
 		if err != nil {
 			c.JSON(500, gin.H{
@@ -43,82 +42,80 @@ func (t tempHuHandler) GetTempHu() gin.HandlerFunc {
 }
 
 func (t tempHuHandler) GetTempList() gin.HandlerFunc {
-	db, err := sql.Open("sqlite3", "./temphu.db")
 
-	if err != nil {
-		return func(c *gin.Context) {
+	return func(c *gin.Context) {
+		db, err := sql.Open("sqlite3", "./temphu.db")
+
+		if err != nil {
 			c.JSON(500, gin.H{
 				"message": "error",
 				"error": err.Error(),
 			})
+			return
 		}
-	}
 
-	rows, err := db.Query("SELECT date, temp FROM temphu WHERE DATETIME(date) BETWEEN DATETIME('now', '-1 day') AND DATETIME('now');")
-
-	if err != nil {
-		log.Fatal(err.Error())
-	}
-	var temps = "[["
-	for rows.Next() {
-		var date string
-		var temp int
-		err := rows.Scan(&date, &temp)
+		rows, err := db.Query("SELECT date, temp FROM temphu WHERE DATETIME(date) BETWEEN DATETIME('now', '-1 day') AND DATETIME('now');")
 
 		if err != nil {
-			//TODO error
+			log.Fatal(err.Error())
+		}
+		var temps = "[["
+		for rows.Next() {
+			var date string
+			var temp int
+			err := rows.Scan(&date, &temp)
+
+			if err != nil {
+				//TODO error
+			}
+
+			temps += "[\""+date+"\","+strconv.Itoa(temp)+"],"
 		}
 
-		temps += "[\""+date+"\","+strconv.Itoa(temp)+"],"
-	}
+		l := len(temps)
+		temps = temps[:l-1]
 
-	l := len(temps)
-	temps = temps[:l-1]
-
-	temps += "]]"
-
-	return func(c *gin.Context) {
+		temps += "]]"
 		//c.JSON(200, temps)
 		c.Data(200, "application/json", []byte(temps))
 	}
 }
 
 func (t tempHuHandler) GetHuList() gin.HandlerFunc {
-	db, err := sql.Open("sqlite3", "./temphu.db")
 
-	if err != nil {
-		return func(c *gin.Context) {
+	return func(c *gin.Context) {
+		db, err := sql.Open("sqlite3", "./temphu.db")
+
+		if err != nil {
 			c.JSON(500, gin.H{
 				"message": "error",
 				"error": err.Error(),
 			})
+			return
 		}
-	}
 
-	rows, err := db.Query("SELECT date, hu FROM temphu WHERE DATE(date) BETWEEN DATETIME('now', '-1 day') AND DATETIME('now');")
-
-	if err != nil {
-		log.Fatal(err.Error())
-	}
-	var hus = "[["
-	for rows.Next() {
-		var date string
-		var hu int
-		err := rows.Scan(&date, &hu)
+		rows, err := db.Query("SELECT date, hu FROM temphu WHERE DATE(date) BETWEEN DATETIME('now', '-1 day') AND DATETIME('now');")
 
 		if err != nil {
-			//TODO error
+			log.Fatal(err.Error())
+		}
+		var hus = "[["
+		for rows.Next() {
+			var date string
+			var hu int
+			err := rows.Scan(&date, &hu)
+
+			if err != nil {
+				//TODO error
+			}
+
+			hus += "[\""+date+"\","+strconv.Itoa(hu)+"],"
 		}
 
-		hus += "[\""+date+"\","+strconv.Itoa(hu)+"],"
-	}
+		l := len(hus)
+		hus = hus[:l-1]
 
-	l := len(hus)
-	hus = hus[:l-1]
-
-	hus += "]]"
-
-	return func(c *gin.Context) {
+		hus += "]]"
 		//c.JSON(200, hus)
 		c.Data(200, "application/json", []byte(hus))
 	}

@@ -11,16 +11,15 @@ type ioHandler struct {
 }
 
 func (i ioHandler) IoHigh() gin.HandlerFunc {
-	if !i.isIoWorking {
-		return func(c *gin.Context) {
+
+	return func(c *gin.Context) {
+		if !i.isIoWorking {
 			c.JSON(500,  gin.H{
 				"message": "error",
 				"error": "gpio is not working",
 			})
+			return
 		}
-	}
-
-	return func(c *gin.Context) {
 		pinNum, err := strconv.Atoi(c.Param("pin"))
 
 		if err != nil {
@@ -41,16 +40,15 @@ func (i ioHandler) IoHigh() gin.HandlerFunc {
 }
 
 func (i ioHandler) IoLow() gin.HandlerFunc {
-	if !i.isIoWorking {
-		return func(c *gin.Context) {
+
+	return func(c *gin.Context) {
+		if !i.isIoWorking {
 			c.JSON(500,  gin.H{
 				"message": "error",
 				"error": "gpio is not working",
 			})
+			return
 		}
-	}
-
-	return func(c *gin.Context) {
 		pinNum, err := strconv.Atoi(c.Param("pin"))
 
 		if err != nil {

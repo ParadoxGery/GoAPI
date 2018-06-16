@@ -11,14 +11,14 @@ type lazorHandler struct {
 }
 
 func (l lazorHandler) Pew(on bool) gin.HandlerFunc {
-	if !l.ioIsWorking {
-		return func(c *gin.Context) {
+	return func(c *gin.Context) {
+		if !l.ioIsWorking {
 			c.JSON(500, gin.H{
 				"message": "gpio is not working",
 			})
+
+			return
 		}
-	}
-	return func(c *gin.Context) {
 		pin := rpio.Pin(10)
 		pin.Output()
 		if on {

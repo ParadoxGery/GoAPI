@@ -44,12 +44,12 @@ func main() {
 }
 
 func collectData() {
-	db, err := sql.Open("sqlite3", "./temphu.db")
-
-	if err != nil {
-		return
-	}
 	for {
+		db, err := sql.Open("sqlite3", "./temphu.db")
+
+		if err != nil {
+			continue
+		}
 		temp, hu, _ , err := dht.ReadDHTxxWithRetry(dht.DHT11, 9, false, 5)
 
 		if err != nil {
