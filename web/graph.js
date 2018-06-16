@@ -1,3 +1,4 @@
+var plot1 = null;
 var plot2 = null;
 
 function fetchAjaxData(url, success) {
@@ -11,27 +12,28 @@ function fetchAjaxData(url, success) {
     });
 }
 
-function createPlot(url) {
+function createPlot(url, place, headline, yAxisLabel) {
     fetchAjaxData(url, function(data) {
-        if (plot2 == null) {
-            plot2 = $.jqplot('chart2', data, {
-                title: "AJAX JSON Data Renderer"
-            });
-        } else {
-            plot2.replot({data: data});
-            console.log('replotting');
-        }
+        plot = $.jqplot(place, data, {
+            title: headline,
+            axes: {
+                xaxis: {
+                    label: 'time [hh:mm]',
+                    renderer:$.jqplot.DateAxisRenderer,
+                    //tickOptions:{formatString:'%H:%M'},
+                    //tickInterval:'1 hour'
+                },
+                yaxis: {
+                    label: yAxisLabel,
+                    labelRenderer: $.jqplot.CanvasAxisLabelRenderer
+                }
+            }
+        });
     });
 }
 
 $(document).ready(function(){
-    var jsonurl = "./jsondata.txt";
-
-    //Regenerate the plot on button click.
-    $('#ajax-button').click(function() {
-        createPlot(jsonurl);
-    });
-
-    //Generate the plot first time through.
-    createPlot(jsonurl);
+    var jsonurl = "http://localhost:8888/temps";
+    createPlot(jsonurl,"chart1","Day Temperature","temperature [°C]");
+    createPlot(jsonurl,"chart2","Day Humidity","humidity [%]");
 });
