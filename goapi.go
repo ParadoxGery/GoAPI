@@ -29,8 +29,11 @@ func main() {
 
 	//TEMPDATA
 	r.GET("/temps", func(c *gin.Context) {
-		c.JSON(200, [][][]int{ { {1, 2}, {3, 5}, {5, 13}, {1, 42}, {3, 45}, {5,53} } })
+		//c.JSON(200, [][][]int{ { {1, 2}, {3, 5}, {5, 13}, {1, 42}, {3, 45}, {5,53} } })
+		c.JSON(200, [][]gin.H{ { {"a": 2}, {"v": 5}, {"x": 13}, {"2": 42}, {"aa": 45}, {"5":53} } })
 	})
+
+	r.GET("/tempdata", sensors.TempHuHandler(9).GetTempList())
 
 	//API REPORT
 	r.GET("/api", func(c *gin.Context) {
