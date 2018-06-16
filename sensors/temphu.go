@@ -69,7 +69,7 @@ func (t tempHuHandler) GetTempList() gin.HandlerFunc {
 			//TODO error
 		}
 
-		temps += "[\""+date+"\","+strconv.Itoa(temp)+"]"
+		temps += "[\""+date+"\","+strconv.Itoa(temp)+"],"
 	}
 
 	temps += "]]"
