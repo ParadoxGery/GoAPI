@@ -72,6 +72,9 @@ func (t tempHuHandler) GetTempList() gin.HandlerFunc {
 		temps += "[\""+date+"\","+strconv.Itoa(temp)+"],"
 	}
 
+	l := len(temps)
+	temps = temps[:l-1]
+
 	temps += "]]"
 
 	return func(c *gin.Context) {
